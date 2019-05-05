@@ -1,0 +1,73 @@
+pragma solidity ^0.5.0;
+
+
+contract SimpleStorage{
+  uint storedData;
+  
+  //票種最大數量
+  uint student_max;
+  uint adult_max;
+  
+  //票種目前剩餘數量
+  uint student_now;
+  uint adult_now;
+  
+  //活動成功與否
+  bool event_active;
+
+  //主辦ID
+  address payable creater= 0x4B0897b0513fdC7C541B6d9D7E929C4e5364D2dB ;
+  
+  //設定票種最大以及現在數量
+  function set(uint x,uint y) private{
+    student_max = x;
+    adult_max = y;
+    student_now = x;
+    adult_now = y;
+  }
+  
+  //查看票種最大數量
+  function get_max() public view returns (uint , uint) {
+    return (student_max , adult_max) ;
+  }
+  
+  //查看票種剩餘數量
+  function get_now() public view returns (uint , uint) {
+    return (student_now , adult_now) ;
+  }
+
+  //創建活動並設定票種最大數量
+  function create_event(uint student,uint adult) public returns (bool){
+      if(msg.sender == creater){
+          set(student,adult);
+          event_active = true ;
+      }
+      else{
+        event_active = false;
+      }
+    return event_active;
+  }
+  
+  //主辦方賣票
+  function sell_ticket() public payable  returns (bool){
+      if(msg.value == 1 ether ){
+          return true;
+      }
+      else{
+          msg.sender.transfer(msg.value);
+          return false;
+      }
+  }
+ 
+
+  function back() public payable{
+      msg.sender.transfer(1 ether);
+  }
+  
+  
+  function contract_ether() public view returns (uint){
+    return address(this).balance;
+  }
+  
+}
+
