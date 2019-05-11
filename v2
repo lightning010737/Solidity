@@ -1,0 +1,93 @@
+pragma solidity ^0.5.0;
+
+
+contract Active_Create
+{
+    //主辦者ID
+    address creater = 0xCA35b7d915458EF540aDe6068dFe2F44E8fa733c;
+    
+    
+    //活動ID
+    bool event_ID_check = false;
+    uint event_ID = 0 ;
+    
+    //票卷數量己價格&價格
+    uint[] ticket_num;
+    uint[] ticket_price;
+    uint ticket_type = 0;
+    
+    //check1 確認活動主辦者
+    function check() public view returns (bool)
+    {
+        if(msg.sender == creater)
+        {
+            return true; 
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    //check2 確認活動是否開始&活動ID
+    function check2() public view returns (bool , uint)
+    {
+        return (event_ID_check , event_ID);
+    }
+
+    //check3 確認票卷數量
+    function check3() public view returns (uint)
+    {
+        return ticket_type;
+    }
+    
+    //check4 確認票卷價格
+    function check4() public view returns (uint[] memory , uint[] memory)
+    {
+        return (ticket_price , ticket_num);
+    }
+    
+    
+    
+    
+    //活動創建ID
+    function create_evevt(uint ID) public returns (bool)
+    {
+        if(msg.sender == creater && event_ID_check == false)
+        {
+            event_ID = ID ;
+            event_ID_check = true ;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    //票卷種類數量
+    function create_ticket(uint num) public
+    {
+        if(msg.sender == creater && event_ID_check == true && ticket_type == 0)
+        {
+            ticket_type = num;
+            ticket_num.length = num;
+            ticket_price.length = num;
+        }
+    }
+    
+
+    //票卷價格&數量
+    function create_ticket_price_num(uint ID , uint price , uint num) public
+    {
+        if(msg.sender == creater && event_ID_check == true && ticket_type != 0)
+        {
+            ticket_num[ID-1] = num;
+            ticket_price[ID-1] = price;
+        }
+    }
+    
+    //買票
+    //function buy_ticket()
+    
+}
