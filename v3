@@ -1,0 +1,74 @@
+pragma solidity ^0.5.0;
+
+
+contract Active_Create
+{
+    //主辦者ID
+    //address creater = 0xCA35b7d915458EF540aDe6068dFe2F44E8fa733c;
+    
+    bool ac_check = false;
+    uint ti_id = 0;
+    
+    struct activity
+    {
+        uint id;
+        address organizer;
+        uint build_time;
+        string subject;
+        string dd;
+    }
+    
+    struct ticket
+    {
+        uint id;
+        string ticket_type;
+        uint supply;
+        uint max_supply;
+        uint price;
+    }
+    
+    activity ac;
+    ticket[] ti;
+    
+    function create_event(uint id , string memory subject , string memory dd) public
+    {
+        if(ac_check == false)
+        {
+            ac.id = id;
+            ac.organizer = msg.sender;
+            ac.subject = subject;
+            ac.dd = dd;
+            ac.build_time = block.timestamp;
+            ac_check = true;
+        }
+    }
+    
+    
+    
+    function create_ticket(string memory ticket_type , uint max_supply , uint price) public
+    {
+        if(msg.sender == ac.organizer && ac_check == true)
+        {
+            ti.length = ti.length+1;
+            ti[ti.length-1].id = ti.length;
+            ti[ti.length-1].ticket_type = ticket_type;
+            ti[ti.length-1].max_supply = max_supply;
+            ti[ti.length-1].supply = max_supply;
+            ti[ti.length-1].price = price;
+        }
+    }
+    
+    
+    
+    
+    function check() public view returns (uint , address , uint , string memory , string memory)
+    {
+        return (ac.id , ac.organizer , ac.build_time , ac.subject , ac.dd);
+    }
+    
+    function check2(uint id) public view returns(uint , string memory , uint , uint , uint)
+    {
+        id = id-1;
+        return (ti[id].id , ti[id].ticket_type , ti[id].supply , ti[id].max_supply , ti[id].price);
+    }
+}
