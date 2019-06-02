@@ -1,0 +1,115 @@
+pragma solidity ^0.5.0;
+
+contract Active_Create
+{
+    
+    struct activity
+    {
+        uint ac_id;
+        address organizer;
+        string build_time;
+        string subject;
+        string other;
+    }
+    
+    struct ticket
+    {
+        uint ti_id;
+        uint ac_id;
+        string ticket_type;
+        uint supply;
+        uint max_supply;
+        uint price;
+    }
+    
+    struct ticket_owner
+    {
+        uint ti_id;
+        address owner;
+        string ticket_type;
+        
+    }
+    
+    activity[] ac;
+    ticket[] ti;
+    
+    
+    
+    function create_event(string memory build_time , string memory subject , string memory other) public returns(uint)
+    {
+        ac.length = ac.length+1;
+        ac[ac.length-1].ac_id = ac.length;
+        ac[ac.length-1].organizer = msg.sender;
+        ac[ac.length-1].build_time = build_time;
+        ac[ac.length-1].subject = subject;
+        ac[ac.length-1].other = other;
+        return ac.length;
+    }
+    
+    function check_create_event(uint num) public view returns(uint , address , string memory , string memory ,string memory)
+    {
+        num = num-1;
+        return (ac[num].ac_id , ac[num].organizer , ac[num].build_time , ac[num].subject , ac[num].other);
+    }
+    
+    function create_ticket(uint ac_id , string memory ticket_type , uint max_supply , uint price) public returns(uint)
+    {
+        if(ac[ac_id-1].organizer == msg.sender)
+        {
+            ti.length = ti.length+1;
+            ti[ti.length-1].ti_id = ti.length;
+            ti[ti.length-1].ac_id = ac_id;
+            ti[ti.length-1].ticket_type = ticket_type;
+            ti[ti.length-1].max_supply = max_supply;
+            ti[ti.length-1].supply = max_supply;
+            ti[ti.length-1].price = price;
+            
+            return ti.length;
+        }
+        else
+        {
+            
+        }
+    }
+    
+    /*function check_create_ticket(uint ac_id) public view returns(uint[] memory)
+    {
+        
+        uint ti_id;
+        uint ac_id;
+        string ticket_type;
+        uint supply;
+        uint max_supply;
+        uint price;
+        
+        uint[] memory x;
+        uint k = 0;
+        for(uint i = 0 ; i <= ti.length ; i++)
+        {
+            if(ti[i].ac_id == ac_id)
+            {
+                k++;
+                x.length = k;
+                x[k] = ti[i].ti_id;
+                
+            }
+        }
+        
+        return x;
+        
+    }*/
+    
+    function check_create_ticket(uint ti_id) public view returns(uint,uint,string memory,uint,uint,uint)
+    {
+        return (ti[ti_id-1].ti_id,ti[ti_id-1].ac_id,ti[ti_id-1].ticket_type,ti[ti_id-1].supply,ti[ti_id-1].max_supply,ti[ti_id-1].price);
+    }
+    
+    
+    
+    function buy() public
+    {
+        
+    }
+    
+   
+}
